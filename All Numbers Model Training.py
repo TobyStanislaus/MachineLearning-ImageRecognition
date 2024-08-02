@@ -1,7 +1,8 @@
 import tensorflow as tf
 import numpy as np
-from keras.models import Sequential
-from keras.layers import Dense,Dropout,Activation,Flatten,Conv2D,MaxPooling2D
+import keras
+from keras._tf_keras.keras.models import Sequential
+from keras._tf_keras.keras import Dense,Dropout,Activation,Flatten,Conv2D,MaxPooling2D
 import pickle
 training_images2 = pickle.load(open("X.pickle","rb"))
 training_labels= pickle.load(open("y.pickle","rb"))

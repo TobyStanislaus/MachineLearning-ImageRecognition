@@ -13,6 +13,25 @@ newTrainingLabels=[]
 ###Inputting my training Data###
 ################################
 
+
+
+
+
+for image in os.listdir(photo1):
+    
+    img=Image.open(photo1+"\\"+image)   
+    #image =img.resize((75,100))
+    #bw = image.convert("1",dither=Image.NONE)
+    #bw.show()
+    arr=np.asarray(img)
+    lis1Photos.append((arr,1))
+
+
+
+
+
+
+
 photo1=r"C:\Users\toby\OneDrive\Documents\Python\hello\TensorFlow\Tensorflow Number Reader\New\Numbers B+W\1"
 photo2=r"C:\Users\toby\OneDrive\Documents\Python\hello\TensorFlow\Tensorflow Number Reader\New\Numbers B+W\2"
 photo3=r"C:\Users\toby\OneDrive\Documents\Python\hello\TensorFlow\Tensorflow Number Reader\New\Numbers B+W\3"
