@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np
+import cv2
 import matplotlib.pyplot as plt
 import os
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-from keras.api.datasets import mnist
+
 from keras.api.utils import to_categorical
 from keras.api.models import Sequential
 from keras.api.layers import Dense, Input
@@ -18,37 +19,56 @@ def show_image(x_train, y_train, amount):
       plt.axis('off')
   plt.show()
 
+def transform_image(dir):
+  for path in os.listdir(dir):
+    im = cv2.imread(dir+'\\'+path)
+    im = cv2.resize(im, (28,28))
+    im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 
-data = pd.read_csv('data\\train.csv')
+    im = im.flatten()
+    df = pd.DataFrame(im)
 
-(x_train,y_train),(x_test,y_test) = mnist.load_data()
-x, y = data.drop(['label'],axis=1).values, data['label']
-
-# print(x.shape[1])
-
-num_train = 38000
-x_train,x_test,y_train,y_test = x[:num_train], x[num_train:], y[:num_train], y[num_train:]
-
-y_train = to_categorical(y_train)
-y_test = to_categorical(y_test)
-
-model = Sequential()
-
-model.add(Input((x.shape[1],)))
-model.add(Dense(10,activation='relu'))
-model.add(Dense(10,activation='relu'))
-model.add(Dense(10,activation='relu'))
-model.add(Dense(10,activation='relu'))
-model.add(Dense(10,activation='softmax'))
-
-model.compile(loss='categorical_crossentropy',
-             optimizer='adam',
-             metrics=['accuracy'])
+    df.to_csv('')
 
 
-model.fit(x_train, y_train, epochs=10, verbose=2)
+
+def transform_data(path):
+  data = pd.read_csv(path)
+
+  x, y = data.drop(['label'],axis=1).values, data['label']
+
+  num_train = 38000
+  x_train, x_test, y_train, y_test = x[:num_train], x[num_train:], y[:num_train], y[num_train:]
+
+  y_train = to_categorical(y_train)
+  y_test = to_categorical(y_test)
+
+  return x_train, x_test, y_train, y_test, (x.shape[1],)
 
 
-model.evaluate(x_test, y_test)
+def build_model(path):
+  x_train, x_test, y_train, y_test, dataShape = transform_data(path)
 
-model.save('Number Reader.keras')
+  model = Sequential()
+
+  model.add(Input(dataShape))
+  model.add(Dense(10,activation='relu'))
+  model.add(Dense(100,activation='relu'))
+  model.add(Dense(100,activation='relu'))
+  model.add(Dense(10,activation='relu'))
+
+  model.add(Dense(10,activation='softmax'))
+
+  model.compile(loss='categorical_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+
+
+  model.fit(x_train, y_train, epochs=30, verbose=2)
+
+  # model.evaluate(x_test, y_test)
+
+  # model.save('Number Reader.keras')
+
+# print(transform_data('data\\train.csv'))
+transform_image('data\\test')
