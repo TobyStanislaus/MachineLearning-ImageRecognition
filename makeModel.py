@@ -15,7 +15,7 @@ def show_image(imageData, label, amount):
     plt.figure(figsize=(10, 8))
     for i in np.arange(1, amount):
         plt.subplot(int('33'+str(i)))
-        plt.imshow(imageData[i+10].reshape(28, 28), cmap=plt.cm.binary)
+        plt.imshow(imageData.reshape(28, 28), cmap=plt.cm.binary)
         plt.title(label[i+10])
         plt.axis('off')
     plt.show()
@@ -76,7 +76,7 @@ def use_model(dir):
         arr = convert_im_to_arr(dir, path)
         images[i] = arr
         i += 1
-
+    show_image(images, 'asdfffffffffffadsffffffffff', 2)
     preds = number_reader.predict(images)
     for pred in preds:
         print(np.argmax(pred))
@@ -87,16 +87,20 @@ def convert_im_to_arr(dir, path):
     im = cv2.resize(im, (28, 28))
     im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
 
+    cv2.imshow('a', im)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     arr = im.flatten()
     arr = arr.reshape(1, -1)
     arr = np.array(arr)
+    arr.astype(int)
     return arr
 
 
 # print(transform_data('data\\train.csv'))
 # build_model('data\\train.csv')
 
-#use_model('data\\test')
+use_model('data\\test')
 
 
 
