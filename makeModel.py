@@ -24,7 +24,7 @@ def show_image(imageData, label, amount):
 def transform_data(path):
     data = pd.read_csv(path)
 
-    x, y = data.drop(['label'], axis=1).values, data['label']
+    x, y = data.drop(['label'],axis=1).values, data['label']
 
     num_train = 38000
     x_train, x_test, y_train, y_test = x[:num_train], x[num_train:], y[:num_train], y[num_train:]
@@ -32,7 +32,7 @@ def transform_data(path):
     y_train = to_categorical(y_train)
     y_test = to_categorical(y_test)
 
-    return x_train, x_test, y_train, y_test, (x.shape[1], 1)
+    return x_train, x_test, y_train, y_test, (x.shape[1],)
 
 
 def build_model(path):
@@ -52,7 +52,7 @@ def build_model(path):
                 optimizer='adam',
                 metrics=['accuracy'])
 
-    #x_train = x_train / 255.0
+    x_train = x_train / 255.0
     model.fit(x_train, y_train, epochs=30, verbose=2)
 
     model.evaluate(x_test, y_test)
@@ -74,10 +74,11 @@ def use_model(dir):
 
     # iterate through the directory and append the image arrays to images
     for path in os.listdir(dir):
+        print(path)
         arr = convert_im_to_arr(dir, path)
         images[i] = arr
         i += 1
-    # show_image(images, 'asdfffffffffffadsffffffffff', 2)
+
     preds = number_reader.predict(images)
     for pred in preds:
         print(np.argmax(pred))
@@ -92,19 +93,20 @@ def convert_im_to_arr(dir, path):
     
     # Invert the image
     im = 1.0 - im
+    view_image(im)
     
     # Rescale to [0, 255]
     im = (im * 255).astype(np.uint8)
-    
-    cv2.imshow('Inverted Image', im)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
     
     arr = im.flatten()
     return arr
 
 
+def view_image(image):
+    cv2.imshow('Inverted Image', image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-build_model('data\\train.csv')
+# build_model('data\\train.csv')
 
-# use_model('data\\test')
+use_model('data\\test')
