@@ -36,6 +36,9 @@ def transform_data(path):
 
 
 def build_model(path):
+    '''
+    Builds the model if you give the path to the csv
+    '''
     x_train, x_test, y_train, y_test, dataShape = transform_data(path)
 
     model = Sequential()

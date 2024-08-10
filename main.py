@@ -1,5 +1,7 @@
 import os
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
-from keras.api.models import load_model
 
-number_reader = load_model('Number Reader.keras')
+from makeModel import use_model, build_model
+
+if __name__ == 'main':
+    use_model('data\\test')
