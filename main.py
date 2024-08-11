@@ -5,3 +5,4 @@ from makeModel import use_model, build_model
 
 if __name__ == 'main':
     use_model('data\\test')
+    print('finished')
